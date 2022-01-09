@@ -14,16 +14,21 @@ header = ('''
       ███    ███     ███     ▀███████████   ███    ███   ▐███  ▀███      ███    ███ 
       ███    ███     ███       ███    ███   ███    ███  ▄███     ███▄    ███    ███ 
       ███    █▀     ▄████▀     ███    ███   ███    █▀  ████       ███▄   ███    █▀  
-                               ███    ███                       V1.0 by ZeebXanFlorb                                          
+                               ███    ███ Information gathering V1.0 by ZeebXanFlorb                                          
     --------------------------------------------------------------------------------''')
 c = 'clear'
 
 
+# this is used for installing required modules
 def install_modules():
     os.system(c)
     print('Installing essential modules...')
     time.sleep(3)
     os.system("sudo apt-get install aircrack-ng")
+    time.sleep(2)
+    os.system("sudo apt-get install macchanger")
+    time.sleep(2)
+    os.system("sudo apt-get install traceroute")
     time.sleep(1)
     print('Modules installed successfully')
     time.sleep(2)
@@ -31,6 +36,7 @@ def install_modules():
     menu()
 
 
+# Wifi interface mode to monitor
 def start_monitor_mode():
     os.system(c)
     print('Detecting network adapters')
@@ -49,6 +55,7 @@ def start_monitor_mode():
     menu()
 
 
+# Wifi interface mode to managed
 def stop_monitor_mode():
     os.system(c)
     print('Detecting network adapters')
@@ -66,6 +73,7 @@ def stop_monitor_mode():
     menu()
 
 
+# Display information and status about Wifi interface
 def network_interface_info():
     os.system(c)
     print('Network interface details:')
@@ -96,10 +104,10 @@ def network_interface_info():
         pass
 
 
+# Wifi scan for 2.4Ghz networks only
 def scan_network_2_4_Ghz():
-    proc = sub.Popen(['airodump-ng', 'wlan0', '-w', 'scan_results/Scanresult24ghz', '--output-format', 'csv', '--manufacturer'])
-    # proc = sub.Popen(['airodump-ng', 'wlan0'])
-    # sudo airodump-ng wlan0mon -w out --output-format csv
+    proc = sub.Popen(
+        ['airodump-ng', 'wlan0', '-w', 'scan_results/Scanresult24ghz', '--output-format', 'csv', '--manufacturer'])
     print('Starting 2.4Ghz Scan...')
     time.sleep(5)
     os.kill(proc.pid, signal.SIGINT)
@@ -128,11 +136,11 @@ def scan_network_2_4_Ghz():
     menu()
 
 
+# Wifi scan for 5Ghz networks only
 def scan_network_5_Ghz():
     proc = sub.Popen(
-        ['airodump-ng', '--band a', 'wlan0', '-w', 'scan_results/Scanresult5ghz', '--output-format', 'csv', '--manufacturer'])
-    # proc = sub.Popen(['airodump-ng', 'wlan0'])
-    # sudo airodump-ng wlan0mon -w out --output-format csv
+        ['airodump-ng', '--band a', 'wlan0', '-w', 'scan_results/Scanresult5ghz', '--output-format', 'csv',
+         '--manufacturer'])
     print('Starting 5Ghz Scan...')
     time.sleep(5)
     os.kill(proc.pid, signal.SIGINT)
@@ -168,10 +176,6 @@ def wifi_scan_menu():
     print("=========================================================")
     print("|   1	|SCAN 2.4Ghz")
     print("|   2	|SCAN 5.0Ghz")
-    # print("|   3	|DEACTIVATE MONITOR MODE")
-    # print("|   4	|NETWORK INTERFACE STATUS")
-    # print("|   5	|SCAN WIFI NETWORKS")
-    # print("|   6	|SHOW SCAN RESULTS")
     print("|   99	|BACK")
     print("=========================================================")
 
@@ -202,6 +206,7 @@ def wifi_scan_menu():
     menu()
 
 
+# Display results of the scan
 def show_results():
     with open('scan_results/Scanresult24ghz-01.csv', 'r', encoding='UTF8') as scan_result:
         csv_reader = csv.reader(scan_result)
@@ -225,6 +230,7 @@ def show_results():
         menu()
 
 
+# Menu for MAC address
 def mac_changer():
     os.system(c)
     print(header)
@@ -255,12 +261,14 @@ def mac_changer():
     menu()
 
 
+# Display MAC address information
 def print_mac():
     os.system('macchanger -s wlan0')
     time.sleep(5)
     mac_changer()
 
 
+# set random MAC adress
 def random_mac():
     print('Setting random MAC address...')
     os.system('ifconfig wlan0 down')
@@ -271,6 +279,7 @@ def random_mac():
     mac_changer()
 
 
+# reset random MAC address to original
 def reset_mac():
     print('Restoring to original MAC...')
     os.system('ifconfig wlan0 down')
@@ -281,6 +290,7 @@ def reset_mac():
     mac_changer()
 
 
+# trace packets send to URL
 def packet_tracer():
     os.system(c)
     url = input("Enter URL:")
@@ -302,7 +312,6 @@ def packet_tracer():
     except EOFError as e:
         print(e)
     menu()
-
 
 
 def exit_program():
